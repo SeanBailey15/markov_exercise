@@ -1,14 +1,18 @@
 /** Textual markov chain generator */
-const fs = require("fs");
 
-let file;
+// INCLUDED CODE BELOW IN ORDER TO READ THE FILE AND PASS THE CONTENTS TO THE
+// CLASS CONSTRUCTOR WHILE WRITING THE METHODS, ALLOWING ME TO SEE RESULTS AS I WORKED
 
-try {
-  file = fs.readFileSync("eggs.txt", "utf8");
-} catch (err) {
-  console.error(err);
-  process.exit(1);
-}
+// const fs = require("fs");
+
+// let file;
+
+// try {
+//   file = fs.readFileSync("eggs.txt", "utf8");
+// } catch (err) {
+//   console.error(err);
+//   process.exit(1);
+// }
 
 class MarkovMachine {
   /** build markov machine; read in text.*/
@@ -47,27 +51,38 @@ class MarkovMachine {
 
   /** return random text from chains */
 
-  makeText(chains = this.chains, numWords = 100) {
-    let keys = Object.keys(chains);
+  makeText(numWords = 100) {
+    let keys = Object.keys(this.chains);
     let start = keys[Math.floor(Math.random() * keys.length)];
     let result = start;
     let current = start;
     for (let i = 2; i <= numWords; i++) {
       let next =
-        chains[current][Math.floor(Math.random() * chains[current].length)];
+        this.chains[current][
+          Math.floor(Math.random() * this.chains[current].length)
+        ];
       if (next == null) {
-        console.log(result);
-        return;
+        return result;
       }
       result += " " + next;
       current = next;
     }
-    console.log(result);
+    return result;
   }
 }
 
-const m = new MarkovMachine(file);
-// const m = new MarkovMachine("the cat in the hat is in the hat");
-console.log(m);
+module.exports = {
+  MarkovMachine,
+};
 
-m.makeText(m.chains, 200);
+// BELOW: FUNCTION CALLS TO SEE RESULTS AS I WORKED
+
+// CREATE AN INSTANCE USING THE FILE CONTENTS, CREATE AN INSTANCE USING A BASIC STRING,
+// const m = new MarkovMachine(file);
+// const m = new MarkovMachine("the cat in the hat is in the hat");
+
+// LOG THE INSTANCE
+// console.log(m);
+
+// FUNCTION CALL TO SEE RESULTS IN THE CONSOLE
+// console.log(m.makeText(200));
